@@ -1,0 +1,112 @@
+
+document.addEventListener("DOMContentLoaded", () => {
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => document.querySelectorAll(selector);
+
+    // Елементи лаунчера
+    const launchButton = $("#launchButton");
+    const folderButton = $("#folderButton");
+    const folderInput = $("#gameFolder");
+    const versionInput = $("#version");
+    const versionTypeInput = $("#versionType");
+    const nicknameInput = $("#nickname");
+    const gameModeInput = $("#gameMode");
+
+    let selectedFolder = "";
+
+    // Перемикання сторінок
+    $$("[data-page]").forEach(button => {
+        button.addEventListener("click", () => {
+            const pageName = button.dataset.page;
+
+            $$("[data-page]").forEach(item => {
+                item.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            $$("[data-page-content]").forEach(page => {
+                page.style.display =
+                    page.dataset.pageContent === pageName ? "block" : "none";
+            });
+        });
+    });
+
+    // Вибір папки Minecraft
+    if (folderButton) {
+        folderButton.addEventListener("click", async () => {
+            try {
+                if (!window.logic?.chooseFolder) {
+                    alert("Функція вибору папки ще не підключена.");
+                    return;
+                }
+
+                const folder = await window.logic.chooseFolder();
+
+                if (folder) {
+                    selectedFolder = folder;
+
+                    if (folderInput) {
+                        folderInput.value = folder;
+                    }
+
+                    await saveSettings();
+                }
+            } catch (error) {
+                console.error("Помилка вибору папки:", error);
+                alert("Не вдалося вибрати папку.");
+            }
+        });
+    }
+
+    // Збереження налаштувань
+    async function saveSettings() {
+        const settings = {
+            version: versionInput?.value || "",
+            versionType: versionTypeInput?.value || "release",
+            nickname: nicknameInput?.value || "",
+            gameMode: gameModeInput?.value || "survival",
+            gameFolder: selectedFolder
+        };
+
+        if (window.logic?.saveSettings) {
+            await window.logic.saveSettings(settings);
+        }
+    }
+
+    // Збереження при зміні налаштувань
+    [
+        versionInput,
+        versionTypeInput,
+        nicknameInput,
+        gameModeInput
+    ].forEach(element => {
+        element?.addEventListener("change", saveSettings);
+    });
+
+    // Кнопка запуску
+    if (launchButton) {
+        launchButton.addEventListener("click", async () => {
+            const nickname = nicknameInput?.value.trim();
+
+            if (!nickname) {
+                alert("Введи свій нікнейм!");
+                nicknameInput?.focus();
+                return;
+            }
+
+            if (!versionInput?.value) {
+                alert("Спочатку вибери версію Minecraft!");
+                return;
+            }
+
+            await saveSettings();
+
+            alert(
+                "Налаштування збережено! Підключення справжнього запуску Minecraft буде наступним етапом."
+            );
+        });
+    }
+
+    console.log("Logic Launcher готовий!");
+});

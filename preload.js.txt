@@ -1,0 +1,9 @@
+
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('logic', {
+    chooseFolder: () => ipcRenderer.invoke('choose-folder'),
+
+    saveSettings: (settings) =>
+        ipcRenderer.invoke('save-settings', settings)
+});

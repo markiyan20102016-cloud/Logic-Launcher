@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logic Launcher</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <h1>LOGIC</h1>
+    <p>MINECRAFT LAUNCHER</p>
+
+    <button onclick="showPage('play')">🎮 Грати</button>
+    <button onclick="showPage('accounts')">👤 Акаунти</button>
+    <button onclick="showPage('settings')">⚙ Налаштування</button>
+</div>
+
+<main>
+    <section id="play">
+        <h1>Logic Launcher</h1>
+        <h2>Твоя гра. Твої правила.</h2>
+
+        <label>Версія Minecraft</label>
+        <select id="version">
+            <option>1.21.10</option>
+            <option>1.21.8</option>
+            <option>1.21.5</option>
+            <option>1.20.4</option>
+            <option>1.19.4</option>
+            <option>1.18.2</option>
+            <option>1.16.5</option>
+        </select>
+
+        <label>Тип версії</label>
+        <select id="type">
+            <option>Release</option>
+            <option>Snapshot</option>
+            <option>Beta</option>
+            <option>Alpha</option>
+        </select>
+
+        <label>Ігровий нікнейм</label>
+        <input id="nickname" placeholder="Твій нік">
+
+        <label>Тип гри</label>
+        <select id="mode">
+            <option>Локальна гра</option>
+            <option>Онлайн гра</option>
+        </select>
+
+        <button class="launch" onclick="launchGame()">
+            ▶ ЗАПУСТИТИ MINECRAFT
+        </button>
+
+        <p id="status">Logic Launcher готовий!</p>
+    </section>
+
+    <section id="accounts" class="hidden">
+        <h1>Ігрові акаунти</h1>
+        <button onclick="window.logic.openUrl('https://ely.by/')">
+            Ely.by
+        </button>
+        <button onclick="window.logic.openUrl('https://account.microsoft.com/')">
+            Microsoft
+        </button>
+    </section>
+
+    <section id="settings" class="hidden">
+        <h1>Налаштування</h1>
+        <button onclick="chooseGameFolder()">
+            📁 Обрати папку гри
+        </button>
+        <p id="folder">Стандартна папка Minecraft</p>
+    </section>
+</main>
+
+<script src="renderer.js"></script>
+</body>
+</html>
